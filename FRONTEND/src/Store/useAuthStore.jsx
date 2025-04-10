@@ -44,12 +44,12 @@ export const useAuthStore = create((set) => ({
     set({ isSignup: true });
     try {
       const res = await axiosInstance.post("/user/signup", data);
-      set({ authuser: res.data });
-
       toast.success("Signup successful!");
+      set({ authuser: res.data });
     } catch (error) {
       toast.error(error.response.data.message);
       console.log("Error in signup:", error.response?.data || error.message);
+      toast.error("Email already exists. Please try again.");
       set({ authuser: null });
     } finally {
       set({ isSignup: false });
@@ -65,6 +65,7 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       toast.error(error.response.data.message);
       console.log("Error in signin:", error.response?.data || error.message);
+      toast.error("Invalid credentials. Please try again.");
       set({ authuser: null });
     } finally {
       set({ isSignin: false });
@@ -87,7 +88,7 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await axiosInstance.put("/user/update-profile", data);
       set({ authuser: res.data });
-
+          
       toast.success("Profile Picture has been updated successfully!");
     } catch (error) {
       toast.error(error.response.data.message);

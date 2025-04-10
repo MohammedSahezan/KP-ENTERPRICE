@@ -49,12 +49,8 @@ function AllTaskTable() {
             userTasks.filter((task) => task.completed)?.length || 0;
           const failedTaskCount =
             userTasks.filter((task) => task.failed)?.length || 0;
-          const countedTasks =
-            newTaskCount +
-            activeTaskCount +
-            completedTaskCount +
-            failedTaskCount;
-          const pendingTaskCount = Math.max(userTasks.length - countedTasks, 0);
+          const pendingTaskCount =
+            userTasks.filter((task) => task.pending)?.length || 0;
 
           return (
             <ul

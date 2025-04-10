@@ -460,7 +460,7 @@ function HomePage() {
                   className="inline-flex items-center"
                 >
                   <svg
-                    className="w-8 ${themeStyles[theme].textPrimary}"
+                    className={`w-8 `}
                     viewBox="0 0 24 24"
                     strokeLinejoin="round"
                     strokeWidth="2"

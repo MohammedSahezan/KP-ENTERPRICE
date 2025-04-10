@@ -41,14 +41,14 @@ const handleSignup = async(req, res) => {
         // Create a JWT token
         const token = jwt.sign({ userId: newUser._id, email: newUser.email }, // Payload
             process.env.JWT_SECRET, // Secret key from .env file
-            { expiresIn: '1h' } // Token expiration time
+            { expiresIn: '3h' } // Token expiration time
         );
 
         // Set the token as a cookie
         res.cookie('token', token, {
             httpOnly: true, // Cannot be accessed via JavaScript
             secure: process.env.NODE_ENV === 'production', // Only set cookie over HTTPS in production
-            maxAge: 3600000 // 1 hour expiration for the cookie
+            maxAge: 10800000 // 3 hour expiration for the cookie
         });
 
 
@@ -90,14 +90,15 @@ const handleSignin = async(req, res) => {
         // Create a JWT token
         const token = jwt.sign({ userId: existingUser._id, email: existingUser.email }, // Payload
             process.env.JWT_SECRET, // Secret key from .env file
-            { expiresIn: '1h' } // Token expiration time
+            { expiresIn: '3h' } // Token expiration time
         );
 
         // Set the token as a cookie
         res.cookie('token', token, {
             httpOnly: true, // Cannot be accessed via JavaScript
             secure: process.env.NODE_ENV === 'production', // Only set cookie over HTTPS in production
-            maxAge: 3600000 // 1 hour expiration for the cookie
+            // 3 hour expiration for the cookie
+            maxAge: 10800000 // 3 hours in milliseconds
         });
 
         // Respond with success

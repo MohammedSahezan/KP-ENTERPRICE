@@ -14,6 +14,8 @@ import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import EmployeeDashboard from "./Pages/EmployeeDashboard";
 import AdminDashboard from "./Pages/AdminDashboard";
+import { Toaster } from "react-hot-toast";
+import LeaveForm from "./Pages/LeaveForm";
 function App() {
   const { theme } = useThemeStore();
   const { authuser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -31,6 +33,7 @@ function App() {
 
   return (
     <div data-theme={theme}>
+      <Toaster position="top-center" reverseOrder={false} />
       <Navbar />
       {/* ✅ Added padding to prevent overlap */}
       <div className="pt-[65px]">
@@ -87,6 +90,12 @@ function App() {
             path="/admin-dashboard"
             element={
               authuser ? <AdminDashboard /> : <Navigate to="/signup" replace />
+            }
+          />
+          <Route
+            path="/LeaveForm"
+            element={
+              authuser ? <LeaveForm /> : <Navigate to="/signup" replace />
             }
           />
         </Routes>

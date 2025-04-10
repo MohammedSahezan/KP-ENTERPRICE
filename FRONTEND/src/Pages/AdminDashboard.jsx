@@ -2,11 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useThemeStore } from "../Store/UseThemeStore";
 import { useAuthStore } from "../Store/useAuthStore";
 import { useTaskStore } from "../Store/UseTaskStore";
-import { Delete, DeleteIcon, LucideDelete, Trash } from "lucide-react";
+import {
+  CheckCircle,
+  Delete,
+  DeleteIcon,
+  LucideDelete,
+  Trash,
+} from "lucide-react";
 import AllTaskTable from "../Component/AllTaskTable";
-
+import { useLeaveStore } from "../Store/UseLeaveStore";
 function AdminDashboard() {
   const { theme, setTheme } = useThemeStore();
+
+  const {
+    leave,
+    getLeaveHistory,
+    leaveHistory,
+    updateLeaveStatus,
+    deleteLeave,
+  } = useLeaveStore();
   const { tasks, getAllTasks, createTask, getTaskList, UserTask, deleteTask } =
     useTaskStore();
   const { authuser, AllUser, getAllUsers } = useAuthStore(); // Assuming getAllUsers fetches users
@@ -23,10 +37,11 @@ function AdminDashboard() {
     pending: [],
   });
   const [isFormOpen, setIsFormOpen] = useState(false);
-
+  const [isLeaveFormOpen, setIsLeaveFormOpen] = useState(false);
   useEffect(() => {
     getAllUsers();
-  }, [getAllUsers]);
+    getLeaveHistory();
+  }, [getAllUsers, getLeaveHistory]);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -112,6 +127,89 @@ function AdminDashboard() {
           >
             Add Task
           </button>
+
+          {
+            <button
+              onClick={() => {
+                setIsLeaveFormOpen(!isLeaveFormOpen);
+              }}
+              className="mb-4 mx-5 px-4 py-2 rounded hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500
+          bg-green-600 text-white"
+            >
+              Leave Request
+            </button>
+          }
+          {isLeaveFormOpen && (
+            <div className="overflow-y-auto max-h-96 p-4">
+              <h2 className="text-2xl font-semibold mb-4">
+                Leave Requests for: {selectedUser?.name}
+              </h2>
+
+              <ul className="space-y-4">
+                {leaveHistory.map((leave) => (
+                  <li
+                    key={leave._id}
+                    className={`relative p-4 rounded-lg border-2 border-${
+                      darkThemes.includes(theme) ? "gray-500" : "gray-600"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-1">
+                      {leave.employee?.replace(/"/g, "").trim().toUpperCase()}
+                    </h3>
+                    <p className="mb-1">
+                      <strong>Reason:</strong>{" "}
+                      {leave.reason?.replace(/"/g, "").trim()}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Status:</strong>{" "}
+                      {leave.status?.replace(/"/g, "").trim()}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Applied At:</strong>{" "}
+                      {leave.appliedAt?.replace(/"/g, "").trim()}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Start:</strong>{" "}
+                      {leave.startDate?.replace(/"/g, "").trim()}
+                    </p>
+                    <p className="mb-1">
+                      <strong>End:</strong>{" "}
+                      {leave.endDate?.replace(/"/g, "").trim()}
+                    </p>
+
+                    {/* Reject button */}
+                    <button
+                      onClick={() => {
+                        updateLeaveStatus({
+                          id: leave._id,
+                          status: "Rejected",
+                        });
+                        deleteLeave({ leaveId: leave._id });
+                      }}
+                      className="absolute top-4 right-12 text-red-600 hover:text-red-800"
+                      title="Reject Leave"
+                    >
+                      <Trash size={24} />
+                    </button>
+
+                    {/* Approve button */}
+                    <button
+                      onClick={() =>
+                        updateLeaveStatus({
+                          id: leave._id,
+                          status: "Approved",
+                        })
+                      }
+                      className="absolute top-4 right-2 text-green-600 hover:text-green-800"
+                      title="Approve Leave"
+                    >
+                      <CheckCircle size={24} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {isFormOpen && (
             <form
@@ -262,8 +360,8 @@ function AdminDashboard() {
                 {task.active.length > 0 && (
                   <p>Active : {task.active.join(", ")}</p>
                 )}
-                {task.active.length > 0 && (
-                  <p>Active : {task.active.join(", ")}</p>
+                {task.pending.length > 0 && (
+                  <p>Pending : {task.pending.join(", ")}</p>
                 )}
 
                 {/* status button */}

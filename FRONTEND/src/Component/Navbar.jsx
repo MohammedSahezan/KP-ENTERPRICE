@@ -74,26 +74,30 @@ function Navbar() {
         </button>
 
         {/* Center - Navigation Links (Desktop) */}
-        <nav className="hidden md:flex gap-6 text-base-content">
-          <Link
-            to="/"
-            className="hover:text-primary font-bold transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className="hover:text-primary font-bold transition-colors"
-          >
-            About
-          </Link>
-          <Link
-            to="/contact"
-            className="hover:text-primary font-bold transition-colors"
-          >
-            Contact
-          </Link>
-        </nav>
+        {authuser ? (
+          <nav className="hidden md:flex gap-6 text-base-content">
+            <Link
+              to="/"
+              className="hover:text-primary font-bold transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className="hover:text-primary font-bold transition-colors"
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className="hover:text-primary font-bold transition-colors"
+            >
+              Contact
+            </Link>
+          </nav>
+        ) : (
+          ""
+        )}
 
         {/* Right - User Actions (Desktop) */}
         <div className="hidden md:flex items-center gap-4 text-base-content">
@@ -101,17 +105,21 @@ function Navbar() {
             <Settings className="w-4 h-4" />
             <span className="hidden sm:inline">Settings</span>
           </Link>
-          <Link to="/profile" className="btn btn-sm gap-2">
-            <User className="w-5 h-5" />
-            <span className="hidden sm:inline">Profile</span>
-          </Link>
+          {authuser ? (
+            <Link to="/profile" className="btn btn-sm gap-2">
+              <User className="w-5 h-5" />
+              <span className="hidden sm:inline">Profile</span>
+            </Link>
+          ) : (
+            ""
+          )}
           {authuser ? (
             <button className="btn btn-sm gap-2" onClick={handleLogout}>
               <LogOut className="w-5 h-5" />
               <span className="hidden sm:inline">Logout</span>
             </button>
           ) : (
-            <Link to="/login" className="btn btn-sm gap-2">
+            <Link to="/signin" className="btn btn-sm gap-2">
               <LogIn className="w-5 h-5" />
               <span className="hidden sm:inline">Login</span>
             </Link>

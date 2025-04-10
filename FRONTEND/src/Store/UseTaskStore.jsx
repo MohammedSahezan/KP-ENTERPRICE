@@ -31,7 +31,6 @@ export const useTaskStore = create((set) => ({
   getTaskList: async (data) => {
     try {
       const res = await axiosInstance.post("/task/taskList", data);
-      console.log("Fetched Tasks:", res.data);
       set({ UserTask: res.data });
       console.log("Task list fetched successfully");
     } catch (error) {
