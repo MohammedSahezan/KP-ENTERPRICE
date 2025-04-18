@@ -13,7 +13,7 @@ function HomePage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const adminEmail = "mitul@gmail.com";
+  const adminEmail = "sahezan@gmail.com";
   const employeeEmails = [
     "jeyur@gmail.com",
     "meet@gmail.com",
