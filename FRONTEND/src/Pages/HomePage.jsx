@@ -21,6 +21,7 @@ function HomePage() {
     "tushar@gmail.com",
     "urmila@gmail.com",
     "shruti@gmail.com",
+    'mitul@gmail.com'
   ];
 
   const themeStyles = {
